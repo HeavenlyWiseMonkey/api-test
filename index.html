@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gif Generator</title>
+</head>
+<body>
+    <input type="text">
+    <button class="newGifButton">New Gif</button>
+    <img src="#">
+    <script>
+        function isEmpty(obj) {
+            for (const prop in obj) {
+                if (Object.hasOwn(obj, prop)) {
+                return false;
+                }
+            }
+            return true;
+        }
+        function generateNewGif(inputData='cat') {
+            const img = document.querySelector('img');
+            fetch('https://api.giphy.com/v1/gifs/translate?api_key=UmcJSC7Bq7U091swx2DgjQvbmfA8rYck&s=' + inputData, {mode: 'cors'})
+            .then((response) => {
+                return response.json();
+            })
+            .then((response) => {
+                const imageObject = response.data.images;
+                if (!isEmpty(imageObject)) {
+                    img.src = imageObject.original.url;
+                }
+                else {
+                    img.src = "https://media3.giphy.com/media/lJNoBCvQYp7nq/giphy.gif?cid=e589b1488nmu0875ppg4x12zmn0lo0e049t4cr2vl8y5maai&ep=v1_gifs_translate&rid=giphy.gif&ct=g"
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+                img.src = "https://media3.giphy.com/media/lJNoBCvQYp7nq/giphy.gif?cid=e589b1488nmu0875ppg4x12zmn0lo0e049t4cr2vl8y5maai&ep=v1_gifs_translate&rid=giphy.gif&ct=g"
+            });
+        }
+        generateNewGif();
+        const newGifButton = document.querySelector('.newGifButton');
+        const input = document.querySelector('input');
+        newGifButton.addEventListener('click', () => {
+            generateNewGif(input.value);
+        })
+    </script>
+</body>
+</html>
